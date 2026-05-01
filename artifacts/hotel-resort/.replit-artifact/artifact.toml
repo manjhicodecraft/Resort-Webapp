@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Hotel & Resort Demo"
+version = "1.0.0"
+id = "artifacts/hotel-resort"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18451
+
+[services.development]
+run = "pnpm --filter @workspace/hotel-resort run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/hotel-resort", "run", "build" ]
+publicDir = "artifacts/hotel-resort/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18451"
+BASE_PATH = "/"
