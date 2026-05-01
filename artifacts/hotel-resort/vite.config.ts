@@ -5,37 +5,20 @@ import path from "path";
 
 const rawPort = process.env.PORT;
 const port = rawPort ? Number(rawPort) : 3000;
-
 const basePath = process.env.BASE_PATH || "/";
-
-const plugins = [react(), tailwindcss()];
-
-if (process.env.NODE_ENV !== "production" && process.env.REPL_ID !== undefined) {
-  try {
-    const { default: runtimeErrorOverlay } = await import("@replit/vite-plugin-runtime-error-modal");
-    plugins.push(runtimeErrorOverlay());
-    const { cartographer } = await import("@replit/vite-plugin-cartographer");
-    plugins.push(cartographer({ root: path.resolve(import.meta.dirname, "..") }));
-    const { devBanner } = await import("@replit/vite-plugin-dev-banner");
-    plugins.push(devBanner());
-  } catch {
-    // Running outside Replit — skip optional plugins
-  }
-}
 
 export default defineConfig({
   base: basePath,
-  plugins,
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
     },
     dedupe: ["react", "react-dom"],
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
   },
   server: {
