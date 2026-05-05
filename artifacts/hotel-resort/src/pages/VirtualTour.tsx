@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { GALLERY_IMAGES } from "@/data/demo";
 
@@ -31,13 +32,13 @@ export default function VirtualTour() {
 
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
-      <div className="bg-[hsl(220,35%,12%)] py-16 text-center text-white" data-testid="section-tour-header">
-        <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Immersive Experience</p>
-        <h1 className="font-serif text-4xl font-bold mb-3">Virtual Tour</h1>
-        <p className="text-gray-300 max-w-xl mx-auto text-sm">
-          Explore Grand Azure Resort from the comfort of your home. Take a virtual journey through our beautiful property.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Immersive Experience"
+        title="Virtual Tour"
+        description="Explore Grand Azure Resort from the comfort of your home. Take a virtual journey through our beautiful property."
+        image="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1920&auto=format&fit=crop"
+        testId="section-tour-header"
+      />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Video Player */}

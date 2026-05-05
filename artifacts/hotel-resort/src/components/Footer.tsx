@@ -83,11 +83,21 @@ export default function Footer() {
           <p className="text-xs text-gray-500">
             &copy; 2025 Grand Azure Resort. All rights reserved. Demo project for educational purposes.
           </p>
-          <div className="flex gap-4 text-xs text-gray-500">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-gray-500 items-center">
             <a href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-gray-300 transition-colors">Terms of Service</a>
             <a href="#" className="hover:text-gray-300 transition-colors">Cookie Policy</a>
           </div>
+        </div>
+        <div className="mt-4 text-left">
+          <a
+            href="https://thecodexss.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-[hsl(42,75%,62%)] hover:underline hover:text-[hsl(42,75%,52%)] transition-colors"
+          >
+            Developed by TheCOdex Software Solutions
+          </a>
         </div>
       </div>
     </footer>

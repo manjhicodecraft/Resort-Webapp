@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ThumbsUp, MessageSquare } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,10 +45,13 @@ export default function Reviews() {
 
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
-      <div className="bg-[hsl(220,35%,12%)] py-16 text-center text-white" data-testid="section-reviews-header">
-        <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Guest Experiences</p>
-        <h1 className="font-serif text-4xl font-bold">Reviews &amp; Ratings</h1>
-      </div>
+      <PageHeader
+        eyebrow="Guest Experiences"
+        title="Reviews & Ratings"
+        description="Real stories from guests who came for the view and stayed for the care."
+        image="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1920&auto=format&fit=crop"
+        testId="section-reviews-header"
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Summary */}

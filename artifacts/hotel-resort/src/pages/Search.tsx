@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search as SearchIcon, SlidersHorizontal } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import RoomCard from "@/components/RoomCard";
 import { ROOMS } from "@/data/demo";
@@ -24,10 +25,13 @@ export default function Search() {
 
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
-      <div className="bg-[hsl(220,35%,12%)] py-16 text-center text-white" data-testid="section-search-header">
-        <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Find Your Perfect Room</p>
-        <h1 className="font-serif text-4xl font-bold mb-4">Search &amp; Filter</h1>
-        <div className="max-w-xl mx-auto px-4">
+      <PageHeader
+        eyebrow="Find Your Perfect Room"
+        title="Search & Filter"
+        image="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&auto=format&fit=crop"
+        testId="section-search-header"
+      >
+        <div className="px-4">
           <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2">
             <SearchIcon className="w-5 h-5 text-gray-400" />
             <input
@@ -40,7 +44,7 @@ export default function Search() {
             />
           </div>
         </div>
-      </div>
+      </PageHeader>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-6">

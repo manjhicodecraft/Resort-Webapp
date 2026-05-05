@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Check, CreditCard, Smartphone, ChevronRight, Download } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -153,17 +154,20 @@ export default function Booking() {
 
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
-      <div className="bg-[hsl(220,35%,12%)] py-16 text-center text-white" data-testid="section-booking-header">
-        <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Reservations</p>
-        <h1 className="font-serif text-4xl font-bold">Book Your Stay</h1>
-      </div>
+      <PageHeader
+        eyebrow="Reservations"
+        title="Book Your Stay"
+        description="Choose your dates, pick a room, and reserve your Grand Azure escape in a few simple steps."
+        image="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1920&auto=format&fit=crop"
+        testId="section-booking-header"
+      />
 
       {/* Steps indicator */}
       <div className="max-w-xl mx-auto px-4 pt-8">
         <div className="flex items-center justify-center gap-4 mb-8">
           {(["form", "payment", "confirmed"] as Step[]).map((s, i) => (
             <div key={s} className="flex items-center gap-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === s || (s === "confirmed" && step === "confirmed") ? "bg-[hsl(220,35%,14%)] text-white" : step === "payment" && s === "form" ? "bg-[hsl(42,75%,52%)] text-white" : "bg-gray-200 text-gray-500"}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === s ? "bg-[hsl(220,35%,14%)] text-white" : step === "payment" && s === "form" ? "bg-[hsl(42,75%,52%)] text-white" : "bg-gray-200 text-gray-500"}`}>
                 {i === 0 && step === "payment" ? <Check className="w-4 h-4" /> : i + 1}
               </div>
               <span className="text-xs font-medium text-gray-600 hidden sm:block capitalize">{s === "form" ? "Details" : s === "payment" ? "Payment" : "Confirmed"}</span>

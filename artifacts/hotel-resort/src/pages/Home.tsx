@@ -1,23 +1,66 @@
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, Star, MapPin, Calendar, Shield, Phone } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Calendar, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StarRating from "@/components/StarRating";
 import { GALLERY_IMAGES, REVIEWS, SPECIAL_OFFERS, ATTRACTIONS } from "@/data/demo";
 
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1920&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&auto=format&fit=crop",
+];
+
 export default function Home() {
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setHeroIndex((index) => (index + 1) % HERO_IMAGES.length);
+    }, 4500);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const nextHero = () => setHeroIndex((index) => (index + 1) % HERO_IMAGES.length);
+  const prevHero = () => setHeroIndex((index) => (index - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
       <section
         className="relative min-h-screen flex items-center justify-center"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920&auto=format&fit=crop')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
         data-testid="section-hero"
       >
+        {HERO_IMAGES.map((image, index) => (
+          <img
+            key={image}
+            src={image}
+            alt=""
+            aria-hidden={index !== heroIndex}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${index === heroIndex ? "opacity-100" : "opacity-0"}`}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        <button
+          type="button"
+          onClick={prevHero}
+          className="absolute left-4 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-all hover:bg-white/25 sm:flex"
+          aria-label="Previous resort image"
+          data-testid="button-hero-prev"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button
+          type="button"
+          onClick={nextHero}
+          className="absolute right-4 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-all hover:bg-white/25 sm:flex"
+          aria-label="Next resort image"
+          data-testid="button-hero-next"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
         <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
           <p className="text-[hsl(42,75%,72%)] text-sm font-medium tracking-[0.3em] uppercase mb-4">
             Welcome to Luxury
@@ -66,6 +109,18 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2" data-testid="hero-slider-dots">
+          {HERO_IMAGES.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setHeroIndex(index)}
+              className={`h-2.5 rounded-full transition-all ${index === heroIndex ? "w-8 bg-[hsl(42,75%,62%)]" : "w-2.5 bg-white/50 hover:bg-white/80"}`}
+              aria-label={`Show resort image ${index + 1}`}
+              data-testid={`button-hero-dot-${index}`}
+            />
+          ))}
         </div>
       </section>
 

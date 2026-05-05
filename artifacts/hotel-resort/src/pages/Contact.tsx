@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,13 +24,13 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
-      <div className="bg-[hsl(220,35%,12%)] py-16 text-center text-white" data-testid="section-contact-header">
-        <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Get In Touch</p>
-        <h1 className="font-serif text-4xl font-bold">Contact Us</h1>
-        <p className="text-gray-300 mt-3 max-w-xl mx-auto text-sm">
-          Our concierge team is available around the clock to assist with inquiries, reservations, and special arrangements.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Get In Touch"
+        title="Contact Us"
+        description="Our concierge team is available around the clock to assist with inquiries, reservations, and special arrangements."
+        image="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&auto=format&fit=crop"
+        testId="section-contact-header"
+      />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -1,3 +1,4 @@
+import PageHeader from "@/components/PageHeader";
 import RoomCard from "@/components/RoomCard";
 import { ROOMS } from "@/data/demo";
 
@@ -5,25 +6,13 @@ export default function Rooms() {
   return (
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]">
       {/* Header */}
-      <div
-        className="relative py-20 bg-[hsl(220,35%,12%)]"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&auto=format&fit=crop')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundBlendMode: "overlay",
-        }}
-        data-testid="section-rooms-header"
-      >
-        <div className="absolute inset-0 bg-[hsl(220,35%,10%/0.80)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center text-white">
-          <p className="text-[hsl(42,75%,62%)] text-sm font-medium tracking-widest uppercase mb-2">Accommodations</p>
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold mb-4">Rooms &amp; Suites</h1>
-          <p className="text-gray-300 max-w-xl mx-auto">
-            From thoughtfully designed standard rooms to breathtaking presidential suites, every space is a private haven.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Accommodations"
+        title="Rooms & Suites"
+        description="From thoughtfully designed standard rooms to breathtaking presidential suites, every space is a private haven."
+        image="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&auto=format&fit=crop"
+        testId="section-rooms-header"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" data-testid="section-rooms-list">
         {/* Standard */}

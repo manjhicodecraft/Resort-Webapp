@@ -26,11 +26,12 @@ const NAV_LINKS = [
   { href: "/contact", label: { en: "Contact", hi: "संपर्क" } },
 ];
 
+
 export default function Navbar({ lang, onLangToggle }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     setUser(getCurrentUser());
@@ -54,12 +55,14 @@ export default function Navbar({ lang, onLangToggle }: NavbarProps) {
     return () => window.removeEventListener("focus", refreshUser);
   }, []);
 
+  // Home page par transparent, baaki par solid dark
+  const isHome = location === "/";
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[hsl(220,35%,10%)] shadow-lg"
-          : "bg-[hsl(220,35%,10%/0.95)]"
+        isHome
+          ? (scrolled ? "bg-[hsl(220,35%,10%)] shadow-lg" : "bg-[hsl(220,35%,10%/0.95)]")
+          : "bg-[hsl(220,35%,10%)] shadow-lg"
       }`}
       data-testid="navbar"
     >
