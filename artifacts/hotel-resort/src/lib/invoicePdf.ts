@@ -142,7 +142,8 @@ function drawTable(pdf: jsPDF, startY: number, columns: TableColumn[], rows: Lin
   const left = PAGE.margin;
   const tableWidth = PAGE.width - PAGE.margin * 2;
   const headerHeight = 34;
-  const rowPaddingX = 12;
+  const rowPaddingX = 14;
+  const rowPaddingY = 18;
   let y = startY;
 
   setColor(pdf, "fill", COLORS.navySoft);
@@ -169,7 +170,8 @@ function drawTable(pdf: jsPDF, startY: number, columns: TableColumn[], rows: Lin
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(8.5);
     const noteLines = row.note ? pdf.splitTextToSize(row.note, descriptionWidth) : [];
-    const rowHeight = Math.max(54, 20 + descriptionLines.length * 13 + noteLines.length * 11);
+    const rowTextHeight = descriptionLines.length * 13 + noteLines.length * 11;
+    const rowHeight = Math.max(66, rowPaddingY * 2 + rowTextHeight + (noteLines.length ? 4 : 0));
 
     if (index % 2 === 0) {
       setColor(pdf, "fill", [252, 253, 255]);
@@ -179,7 +181,7 @@ function drawTable(pdf: jsPDF, startY: number, columns: TableColumn[], rows: Lin
     setColor(pdf, "draw", COLORS.line);
     pdf.line(left, y + rowHeight, left + tableWidth, y + rowHeight);
 
-    const textY = y + 21;
+    const textY = y + rowPaddingY + 6;
     wrappedText(pdf, row.description, columns[0].x + rowPaddingX, textY, descriptionWidth, {
       font: "bold",
       lineHeight: 13,
@@ -257,29 +259,32 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
 
   setColor(pdf, "fill", COLORS.navy);
   pdf.rect(0, 0, PAGE.width, 132, "F");
+  const logoX = PAGE.margin;
+  const logoY = 38;
+  const logoSize = 30;
   setColor(pdf, "fill", COLORS.gold);
-  pdf.circle(PAGE.margin + 14, 52, 14, "F");
-  text(pdf, "G", PAGE.margin + 14, 57, {
+  pdf.roundedRect(logoX, logoY, logoSize, logoSize, 15, 15, "F");
+  text(pdf, "G", logoX + logoSize / 2, logoY + 20, {
     align: "center",
     color: COLORS.navy,
     font: "bold",
     size: 12,
   });
 
-  text(pdf, "Grand Azure Resort", PAGE.margin + 38, 48, {
+  text(pdf, "Grand Azure Resort", logoX + logoSize + 12, 52, {
     color: [255, 255, 255],
     font: "bold",
     size: 20,
   });
-  text(pdf, "1, Azure Bay Road, Alibaug, Maharashtra 402201", PAGE.margin + 38, 70, {
+  text(pdf, "1, Azure Bay Road, Alibaug, Maharashtra 402201", logoX + logoSize + 12, 74, {
     color: [220, 224, 230],
     size: 8.8,
   });
-  text(pdf, "reservations@grandazure.com | +91 22 6600 7700", PAGE.margin + 38, 85, {
+  text(pdf, "reservations@grandazure.com | +91 22 6600 7700", logoX + logoSize + 12, 89, {
     color: [220, 224, 230],
     size: 8.8,
   });
-  text(pdf, "GST No: 27AAACG1234A1Z5", PAGE.margin + 38, 100, {
+  text(pdf, "GST No: 27AAACG1234A1Z5", logoX + logoSize + 12, 104, {
     color: [220, 224, 230],
     size: 8.8,
   });
@@ -368,16 +373,30 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
   ]);
 
   const paymentY = endTableY + 28;
+  const paymentBoxWidth = 316;
   setColor(pdf, "fill", COLORS.goldLight);
   setColor(pdf, "draw", [245, 218, 151]);
-  pdf.roundedRect(PAGE.margin, paymentY, 220, 36, 10, 10, "FD");
-  text(pdf, `Payment ${paymentStatus}`, PAGE.margin + 16, paymentY + 23, {
+  pdf.roundedRect(PAGE.margin, paymentY, paymentBoxWidth, 46, 10, 10, "FD");
+  text(pdf, "Payment Status", PAGE.margin + 16, paymentY + 18, {
+    color: COLORS.muted,
+    font: "bold",
+    size: 7.8,
+  });
+  text(pdf, paymentStatus, PAGE.margin + 16, paymentY + 33, {
     color: statusColor,
     font: "bold",
     size: 9.5,
   });
-  text(pdf, `Method: ${booking.paymentMethod}`, PAGE.margin + 250, paymentY + 23, {
+  setColor(pdf, "draw", [245, 218, 151]);
+  pdf.line(PAGE.margin + paymentBoxWidth / 2, paymentY + 10, PAGE.margin + paymentBoxWidth / 2, paymentY + 36);
+  text(pdf, "Method", PAGE.margin + paymentBoxWidth / 2 + 16, paymentY + 18, {
     color: COLORS.muted,
+    font: "bold",
+    size: 7.8,
+  });
+  text(pdf, booking.paymentMethod, PAGE.margin + paymentBoxWidth / 2 + 16, paymentY + 33, {
+    color: COLORS.ink,
+    font: "bold",
     size: 9.5,
   });
 
