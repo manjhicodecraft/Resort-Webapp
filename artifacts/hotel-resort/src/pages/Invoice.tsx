@@ -1,23 +1,8 @@
 import { useEffect, useState } from "react";
-import { Printer, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBookings } from "@/lib/auth";
-import jsPDF from "jspdf";
-
-interface BookingData {
-  id: string;
-  guestName: string;
-  email: string;
-  phone: string;
-  roomName: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-  totalPrice: number;
-  paymentMethod: string;
-  createdAt: string;
-  status: string;
-}
+import { downloadInvoicePdf, type InvoiceBooking } from "@/lib/invoicePdf";
 
 function daysBetween(a: string, b: string) {
   const diff = new Date(b).getTime() - new Date(a).getTime();
@@ -25,7 +10,7 @@ function daysBetween(a: string, b: string) {
 }
 
 export default function Invoice() {
-  const [booking, setBooking] = useState<BookingData | null>(null);
+  const [booking, setBooking] = useState<InvoiceBooking | null>(null);
 
   useEffect(() => {
     const bookings = getBookings();
@@ -33,124 +18,8 @@ export default function Invoice() {
       setBooking(bookings[0]);
     }
   }, []);
-
-
-  const handlePrint = () => window.print();
-
   const handleDownloadPDF = () => {
-    if (!booking) return;
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    // Resort theme colors
-    const navy = "#1a2236";
-    const gold = "#ffcb3c";
-    const gray = "#f7f5f2";
-    doc.setFillColor(navy);
-    doc.rect(0, 0, 595, 90, "F");
-    doc.setFontSize(22);
-    doc.setTextColor(gold);
-    doc.setFont("helvetica", "bold");
-    doc.text("Grand Azure Resort", 40, 50);
-    doc.setFontSize(10);
-    doc.setTextColor("#ffffff");
-    doc.text("1, Azure Bay Road, Alibaug, Maharashtra 402201", 40, 70);
-    doc.text("reservations@grandazure.com | +91 22 6600 7700", 40, 85);
-
-    // Invoice title
-    doc.setFontSize(18);
-    doc.setTextColor(gold);
-    doc.text("INVOICE", 480, 50, { align: "right" });
-    doc.setFontSize(10);
-    doc.setTextColor("#eeeeee");
-    doc.text(`Invoice #: ${booking.id}`, 480, 70, { align: "right" });
-    doc.text(`Date: ${booking.createdAt}`, 480, 85, { align: "right" });
-
-    // Guest & Booking Info
-    doc.setFontSize(12);
-    doc.setTextColor(navy);
-    doc.setFont("helvetica", "bold");
-    doc.text("Billed To", 40, 120);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text(booking.guestName, 40, 140);
-    doc.text(booking.email, 40, 155);
-    doc.text(booking.phone, 40, 170);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("Reservation", 320, 120);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text(`Room: ${booking.roomName}`, 320, 140);
-    doc.text(`Check-in: ${booking.checkIn}`, 320, 155);
-    doc.text(`Check-out: ${booking.checkOut}`, 320, 170);
-    doc.text(`Guests: ${booking.guests}`, 320, 185);
-    doc.text(`Payment: ${booking.paymentMethod}`, 320, 200);
-
-    // Amount Table
-    const nights = daysBetween(booking.checkIn, booking.checkOut);
-    const roomPrice = Math.round(booking.totalPrice / nights);
-    const taxes = Math.round(booking.totalPrice * 0.12);
-    const total = booking.totalPrice + taxes;
-    let y = 220;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(navy);
-    doc.text("Description", 40, y);
-    doc.text("Nights", 250, y);
-    doc.text("Rate", 320, y);
-    doc.text("Amount", 400, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    y += 20;
-    doc.text(booking.roomName, 40, y);
-    doc.text(String(nights), 250, y);
-    doc.text(`₹${roomPrice.toLocaleString("en-IN")}`, 320, y);
-    doc.text(`₹${booking.totalPrice.toLocaleString("en-IN")}`, 400, y);
-    y += 18;
-    doc.text("Complimentary Breakfast", 40, y);
-    doc.text(String(nights), 250, y);
-    doc.text("Included", 320, y);
-    doc.text("₹0", 400, y);
-
-    // Subtotal, GST, Total
-    y += 30;
-    doc.setFont("helvetica", "bold");
-    doc.text("Subtotal", 320, y);
-    doc.setFont("helvetica", "normal");
-    doc.text(`₹${booking.totalPrice.toLocaleString("en-IN")}`, 400, y);
-    y += 18;
-    doc.setFont("helvetica", "bold");
-    doc.text("GST (12%)", 320, y);
-    doc.setFont("helvetica", "normal");
-    doc.text(`₹${taxes.toLocaleString("en-IN")}`, 400, y);
-    y += 18;
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(gold);
-    doc.text("Total Amount", 320, y);
-    doc.text(`₹${total.toLocaleString("en-IN")}`, 400, y);
-
-    // Payment Status
-    y += 30;
-    doc.setFontSize(11);
-    doc.setTextColor(booking.status === "approved" ? "#1e7e34" : "#b7791f");
-    doc.text(`Payment: ${booking.status === "approved" ? "Confirmed" : "Pending"}`, 40, y);
-
-    // Footer
-    y += 40;
-    doc.setFontSize(12);
-    doc.setTextColor(navy);
-    doc.setFont("helvetica", "bold");
-    doc.text("Thank you for choosing Grand Azure Resort", 40, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    y += 16;
-    doc.setTextColor("#888888");
-    doc.text("For any questions, contact us at reservations@grandazure.com", 40, y);
-    y += 14;
-    doc.setFontSize(8);
-    doc.setTextColor("#bbbbbb");
-    doc.text("This is a computer-generated invoice. Demo only — no real transaction occurred.", 40, y);
-
-    doc.save(`Invoice_${booking.id}.pdf`);
+    if (booking) downloadInvoicePdf(booking);
   };
 
   if (!booking) {
@@ -173,10 +42,6 @@ export default function Invoice() {
     <div className="min-h-screen pt-16 bg-[hsl(40,20%,97%)]" data-testid="page-invoice">
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex gap-3 mb-6 print:hidden">
-          <Button onClick={handlePrint} variant="outline" className="border-[hsl(220,35%,14%)] text-[hsl(220,35%,14%)]" data-testid="button-print-invoice">
-            <Printer className="w-4 h-4 mr-2" />
-            Print
-          </Button>
           <Button onClick={handleDownloadPDF} className="bg-[hsl(220,35%,14%)] text-white" data-testid="button-download-invoice">
             <Download className="w-4 h-4 mr-2" />
             Download PDF

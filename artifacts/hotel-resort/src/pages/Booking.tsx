@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ROOMS } from "@/data/demo";
 import { saveBooking, getCurrentUser } from "@/lib/auth";
-import type { Room } from "@/data/demo";
+import { downloadInvoicePdf, type InvoiceBooking } from "@/lib/invoicePdf";
 
 type Step = "form" | "payment" | "confirmed";
 
@@ -33,6 +33,7 @@ export default function Booking() {
   const [step, setStep] = useState<Step>("form");
   const [payMethod, setPayMethod] = useState<"card" | "upi">("card");
   const [bookingRef, setBookingRef] = useState("");
+  const [confirmedBooking, setConfirmedBooking] = useState<InvoiceBooking | null>(null);
 
   const [form, setForm] = useState({
     name: user?.name || "",
@@ -92,6 +93,7 @@ export default function Booking() {
     };
 
     saveBooking(booking);
+    setConfirmedBooking(booking);
     setStep("confirmed");
   };
 
@@ -135,12 +137,17 @@ export default function Booking() {
           </div>
 
           <div className="flex gap-3">
-            <a href="/invoice" className="flex-1">
-              <Button variant="outline" className="w-full border-[hsl(220,35%,14%)] text-[hsl(220,35%,14%)]" data-testid="button-download-invoice">
-                <Download className="w-4 h-4 mr-2" />
-                Invoice
-              </Button>
-            </a>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 border-[hsl(220,35%,14%)] text-[hsl(220,35%,14%)]"
+              onClick={() => confirmedBooking && downloadInvoicePdf(confirmedBooking)}
+              disabled={!confirmedBooking}
+              data-testid="button-download-invoice"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download PDF
+            </Button>
             <a href="/" className="flex-1">
               <Button className="w-full bg-[hsl(220,35%,14%)] text-white" data-testid="button-back-home">
                 Back to Home
