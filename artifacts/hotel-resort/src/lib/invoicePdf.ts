@@ -262,6 +262,7 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
   const logoX = PAGE.margin;
   const logoY = 38;
   const logoSize = 30;
+  const logoTextGap = 18;
   setColor(pdf, "fill", COLORS.gold);
   pdf.roundedRect(logoX, logoY, logoSize, logoSize, 15, 15, "F");
   text(pdf, "G", logoX + logoSize / 2, logoY + 20, {
@@ -271,20 +272,20 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
     size: 12,
   });
 
-  text(pdf, "Grand Azure Resort", logoX + logoSize + 12, 52, {
+  text(pdf, "Grand Azure Resort", logoX + logoSize + logoTextGap, 52, {
     color: [255, 255, 255],
     font: "bold",
     size: 20,
   });
-  text(pdf, "1, Azure Bay Road, Alibaug, Maharashtra 402201", logoX + logoSize + 12, 74, {
+  text(pdf, "1, Azure Bay Road, Alibaug, Maharashtra 402201", logoX + logoSize + logoTextGap, 74, {
     color: [220, 224, 230],
     size: 8.8,
   });
-  text(pdf, "reservations@grandazure.com | +91 22 6600 7700", logoX + logoSize + 12, 89, {
+  text(pdf, "reservations@grandazure.com | +91 22 6600 7700", logoX + logoSize + logoTextGap, 89, {
     color: [220, 224, 230],
     size: 8.8,
   });
-  text(pdf, "GST No: 27AAACG1234A1Z5", logoX + logoSize + 12, 104, {
+  text(pdf, "GST No: 27AAACG1234A1Z5", logoX + logoSize + logoTextGap, 104, {
     color: [220, 224, 230],
     size: 8.8,
   });
@@ -311,7 +312,7 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
   const gap = 18;
   const cardWidth = (contentWidth - gap) / 2;
   panel(pdf, PAGE.margin, cardY, cardWidth, 112);
-  panel(pdf, PAGE.margin + cardWidth + gap, cardY, cardWidth, 112);
+  panel(pdf, PAGE.margin + cardWidth + gap, cardY, cardWidth, 126);
 
   text(pdf, "BILLED TO", PAGE.margin + 16, cardY + 24, {
     color: COLORS.gold,
@@ -345,6 +346,7 @@ export function downloadInvoicePdf(booking: InvoiceBooking) {
   drawKeyValue(pdf, "Check-in", booking.checkIn, detailsX, cardY + 66, detailsWidth);
   drawKeyValue(pdf, "Check-out", booking.checkOut, detailsX, cardY + 84, detailsWidth);
   drawKeyValue(pdf, "Guests", String(booking.guests), detailsX, cardY + 102, detailsWidth);
+  drawKeyValue(pdf, "Payment Method", booking.paymentMethod, detailsX, cardY + 120, detailsWidth);
 
   const tableY = 306;
   const columns: TableColumn[] = [
