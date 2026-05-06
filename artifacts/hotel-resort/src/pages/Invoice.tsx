@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getBookings } from "@/lib/auth";
+import { getBookings, getCurrentUser } from "@/lib/auth";
+import { getBookingUserId } from "@/lib/bookingPass";
 import { downloadInvoicePdf, type InvoiceBooking } from "@/lib/invoicePdf";
 
 function daysBetween(a: string, b: string) {
@@ -11,13 +13,30 @@ function daysBetween(a: string, b: string) {
 
 export default function Invoice() {
   const [booking, setBooking] = useState<InvoiceBooking | null>(null);
+  const [location] = useLocation();
 
   useEffect(() => {
     const bookings = getBookings();
-    if (bookings.length > 0) {
-      setBooking(bookings[0]);
+    const params = new URLSearchParams(location.split("?")[1] || "");
+    const bookingId = params.get("id");
+    const user = getCurrentUser();
+    const userId = user ? getBookingUserId(user.email) : "";
+    const visibleBookings = user?.isAdmin
+      ? bookings
+      : bookings.filter((item: InvoiceBooking & { userId?: string }) => {
+          const bookingUserId = item.userId || getBookingUserId(item.email);
+          return !userId || bookingUserId === userId;
+        });
+    const selectedBooking = bookingId
+      ? visibleBookings.find((item: InvoiceBooking) => item.id === bookingId)
+      : visibleBookings[0];
+
+    if (selectedBooking) {
+      setBooking(selectedBooking);
+    } else {
+      setBooking(null);
     }
-  }, []);
+  }, [location]);
   const handleDownloadPDF = () => {
     if (booking) downloadInvoicePdf(booking);
   };

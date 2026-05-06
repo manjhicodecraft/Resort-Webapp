@@ -126,7 +126,7 @@ export default function Navbar({ lang, onLangToggle }: NavbarProps) {
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/booking" data-testid="link-my-bookings">My Bookings</Link>
+                    <Link href="/my-bookings" data-testid="link-my-bookings">My Bookings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -186,13 +186,23 @@ export default function Navbar({ lang, onLangToggle }: NavbarProps) {
                 {lang === "en" ? "HI" : "EN"}
               </button>
               {user ? (
-                <button
-                  onClick={() => { handleLogout(); setMenuOpen(false); }}
-                  className="text-red-400 text-sm font-medium"
-                  data-testid="button-mobile-logout"
-                >
-                  Logout
-                </button>
+                <>
+                  <Link
+                    href="/my-bookings"
+                    className="text-[hsl(42,75%,62%)] text-sm font-medium"
+                    onClick={() => setMenuOpen(false)}
+                    data-testid="link-mobile-my-bookings"
+                  >
+                    My Bookings
+                  </Link>
+                  <button
+                    onClick={() => { handleLogout(); setMenuOpen(false); }}
+                    className="text-red-400 text-sm font-medium"
+                    data-testid="button-mobile-logout"
+                  >
+                    Logout
+                  </button>
+                </>
               ) : (
                 <Link
                   href="/auth"

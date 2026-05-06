@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ROOMS } from "@/data/demo";
 import { saveBooking, getCurrentUser } from "@/lib/auth";
+import { getBookingUserId } from "@/lib/bookingPass";
+import { openBookingConfirmationEmail } from "@/lib/bookingEmail";
 import { downloadInvoicePdf, type InvoiceBooking } from "@/lib/invoicePdf";
 
 type Step = "form" | "payment" | "confirmed";
@@ -78,6 +80,7 @@ export default function Booking() {
 
     const booking = {
       id: ref,
+      userId: getBookingUserId(user?.email || form.email),
       guestName: form.name,
       email: form.email,
       phone: form.phone,
@@ -95,6 +98,11 @@ export default function Booking() {
     saveBooking(booking);
     setConfirmedBooking(booking);
     setStep("confirmed");
+    openBookingConfirmationEmail(booking);
+    toast({
+      title: "Booking confirmed",
+      description: "Gmail confirmation draft opened. Invoice and QR passes are available in My Bookings.",
+    });
   };
 
   if (step === "confirmed") {
@@ -136,11 +144,11 @@ export default function Booking() {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-[hsl(220,35%,14%)] text-[hsl(220,35%,14%)]"
+              className="w-full border-[hsl(220,35%,14%)] text-[hsl(220,35%,14%)]"
               onClick={() => confirmedBooking && downloadInvoicePdf(confirmedBooking)}
               disabled={!confirmedBooking}
               data-testid="button-download-invoice"
@@ -148,7 +156,12 @@ export default function Booking() {
               <Download className="w-4 h-4 mr-2" />
               Download PDF
             </Button>
-            <a href="/" className="flex-1">
+            <a href="/my-bookings">
+              <Button variant="outline" className="w-full border-[hsl(42,75%,45%)] text-[hsl(42,75%,40%)]" data-testid="button-view-my-bookings">
+                My Bookings
+              </Button>
+            </a>
+            <a href="/">
               <Button className="w-full bg-[hsl(220,35%,14%)] text-white" data-testid="button-back-home">
                 Back to Home
               </Button>
