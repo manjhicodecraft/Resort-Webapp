@@ -126,6 +126,10 @@ export default function Navbar({ lang, onLangToggle }: NavbarProps) {
                     </>
                   )}
                   <DropdownMenuItem asChild>
+                    <Link href="/user-profile" data-testid="link-user-profile">User Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
                     <Link href="/my-bookings" data-testid="link-my-bookings">My Bookings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -187,6 +191,14 @@ export default function Navbar({ lang, onLangToggle }: NavbarProps) {
               </button>
               {user ? (
                 <>
+                  <Link
+                    href="/user-profile"
+                    className="text-[hsl(42,75%,62%)] text-sm font-medium"
+                    onClick={() => setMenuOpen(false)}
+                    data-testid="link-mobile-user-profile"
+                  >
+                    User Profile
+                  </Link>
                   <Link
                     href="/my-bookings"
                     className="text-[hsl(42,75%,62%)] text-sm font-medium"

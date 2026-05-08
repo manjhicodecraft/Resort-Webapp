@@ -18,6 +18,7 @@ import VirtualTour from "@/pages/VirtualTour";
 import Invoice from "@/pages/Invoice";
 import MyBookings from "@/pages/MyBookings";
 import NotFound from "@/pages/not-found";
+import UserProfile from "@/components/UserProfile";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ function AppLayout() {
         <Route path="/virtual-tour" component={VirtualTour} />
         <Route path="/invoice" component={Invoice} />
         <Route path="/my-bookings" component={MyBookings} />
+        <Route path="/user-profile" component={UserProfile} />
         <Route component={NotFound} />
       </Switch>
       {!isAdmin && !isAuth && <Footer />}
